@@ -46,10 +46,13 @@ function power_equipment_leads_setup() {
 		*/
 	add_theme_support( 'post-thumbnails' );
 
-	// This theme uses wp_nav_menu() in one location.
+	// This theme uses wp_nav_menu() in the header and footer.
 	register_nav_menus(
 		array(
-			'menu-1' => esc_html__( 'Primary', 'power-equipment-leads' ),
+			'menu-1'         => esc_html__( 'Primary', 'power-equipment-leads' ),
+			'footer-shop'    => esc_html__( 'Footer: Shop Column', 'power-equipment-leads' ),
+			'footer-company' => esc_html__( 'Footer: Company Column', 'power-equipment-leads' ),
+			'footer-legal'   => esc_html__( 'Footer: Legal Links', 'power-equipment-leads' ),
 		)
 	);
 
@@ -84,6 +87,11 @@ function power_equipment_leads_setup() {
 
 	// Add theme support for selective refresh for widgets.
 	add_theme_support( 'customize-selective-refresh-widgets' );
+
+	// Enable wide/full alignment and responsive embeds for the block editor
+	// (used on regular posts/pages; the homepage itself no longer relies on blocks).
+	add_theme_support( 'align-wide' );
+	add_theme_support( 'responsive-embeds' );
 
 	/**
 	 * Add support for core custom logo.
@@ -141,13 +149,64 @@ function power_equipment_leads_scripts() {
 	wp_enqueue_style( 'power-equipment-leads-style', get_stylesheet_uri(), array(), _S_VERSION );
 	wp_style_add_data( 'power-equipment-leads-style', 'rtl', 'replace' );
 
-	wp_enqueue_script( 'power-equipment-leads-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
+	wp_enqueue_style(
+		'power-equipment-leads-fonts',
+		'https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap',
+		array(),
+		null
+	);
+
+	wp_enqueue_style(
+		'power-equipment-leads-site',
+		get_template_directory_uri() . '/assets/css/site.css',
+		array( 'power-equipment-leads-style', 'power-equipment-leads-fonts' ),
+		_S_VERSION
+	);
+
+	if ( is_front_page() ) {
+		wp_enqueue_style(
+			'power-equipment-leads-sections',
+			get_template_directory_uri() . '/assets/css/sections.css',
+			array( 'power-equipment-leads-site' ),
+			_S_VERSION
+		);
+	}
+
+	wp_enqueue_script(
+		'power-equipment-leads-main',
+		get_template_directory_uri() . '/assets/js/main.js',
+		array(),
+		_S_VERSION,
+		true
+	);
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'power_equipment_leads_scripts' );
+
+/**
+ * Preconnects to Google Fonts' origins for faster font loading.
+ *
+ * @param array  $urls          Resource hint URLs to output.
+ * @param string $relation_type Relation type (dns-prefetch, preconnect, etc.).
+ * @return array
+ */
+function power_equipment_leads_resource_hints( $urls, $relation_type ) {
+	if ( 'preconnect' === $relation_type ) {
+		$urls[] = array(
+			'href'        => 'https://fonts.googleapis.com',
+			'crossorigin' => false,
+		);
+		$urls[] = array(
+			'href'        => 'https://fonts.gstatic.com',
+			'crossorigin' => 'anonymous',
+		);
+	}
+	return $urls;
+}
+add_filter( 'wp_resource_hints', 'power_equipment_leads_resource_hints', 10, 2 );
 
 /**
  * Implement the Custom Header feature.
@@ -168,6 +227,27 @@ require get_template_directory() . '/inc/template-functions.php';
  * Customizer additions.
  */
 require get_template_directory() . '/inc/customizer.php';
+
+/**
+ * Custom nav menu walker used by the header/footer nav locations.
+ */
+require get_template_directory() . '/inc/nav-walker.php';
+
+/**
+ * Inline SVG icon helper used across the homepage sections.
+ */
+require get_template_directory() . '/inc/icons.php';
+
+/**
+ * Homepage section settings (Hero, Quick Stats, Lead Form, etc.) — all
+ * editable from Appearance > Customize instead of the block editor.
+ */
+require get_template_directory() . '/inc/homepage-sections.php';
+
+/**
+ * Lead capture: storage, AJAX handler, and admin settings.
+ */
+require get_template_directory() . '/inc/leads.php';
 
 /**
  * Load Jetpack compatibility file.

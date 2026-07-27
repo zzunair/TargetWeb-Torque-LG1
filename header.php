@@ -25,35 +25,52 @@
 <div id="page" class="site">
 	<a class="skip-link screen-reader-text" href="#primary"><?php esc_html_e( 'Skip to content', 'power-equipment-leads' ); ?></a>
 
-	<header id="masthead" class="site-header">
-		<div class="site-branding">
-			<?php
-			the_custom_logo();
-			if ( is_front_page() && is_home() ) :
-				?>
-				<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-				<?php
-			else :
-				?>
-				<p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
-				<?php
-			endif;
-			$power_equipment_leads_description = get_bloginfo( 'description', 'display' );
-			if ( $power_equipment_leads_description || is_customize_preview() ) :
-				?>
-				<p class="site-description"><?php echo $power_equipment_leads_description; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
-			<?php endif; ?>
-		</div><!-- .site-branding -->
+	<header class="site-header" id="siteHeader">
+		<div class="header-inner">
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="brand" aria-label="<?php echo esc_attr( get_bloginfo( 'name' ) . ' ' . __( 'home', 'power-equipment-leads' ) ); ?>">
+				<?php if ( has_custom_logo() ) : ?>
+					<?php the_custom_logo(); ?>
+				<?php else : ?>
+					<?php $power_equipment_leads_brand_text = power_equipment_leads_get_theme_setting( 'brand_initials' ); ?>
+					<span class="brand-mark clip-diagonal-b">
+						<?php if ( $power_equipment_leads_brand_text ) : ?>
+							<?php echo esc_html( $power_equipment_leads_brand_text ); ?>
+						<?php else : ?>
+							<?php power_equipment_leads_icon( 'flame' ); ?>
+						<?php endif; ?>
+					</span>
+					<span class="brand-text">
+						<span class="brand-name"><?php bloginfo( 'name' ); ?></span>
+						<?php $power_equipment_leads_tagline = get_bloginfo( 'description', 'display' ); ?>
+						<?php if ( $power_equipment_leads_tagline ) : ?>
+							<span class="brand-sub"><?php echo esc_html( $power_equipment_leads_tagline ); ?></span>
+						<?php endif; ?>
+					</span>
+				<?php endif; ?>
+			</a>
 
-		<nav id="site-navigation" class="main-navigation">
-			<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false"><?php esc_html_e( 'Primary Menu', 'power-equipment-leads' ); ?></button>
-			<?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'menu-1',
-					'menu_id'        => 'primary-menu',
-				)
-			);
-			?>
-		</nav><!-- #site-navigation -->
-	</header><!-- #masthead -->
+			<nav class="primary-nav" aria-label="<?php esc_attr_e( 'Primary', 'power-equipment-leads' ); ?>">
+				<?php power_equipment_leads_primary_nav(); ?>
+			</nav>
+
+			<div class="header-cta">
+				<?php $power_equipment_leads_phone = power_equipment_leads_get_theme_setting( 'phone' ); ?>
+				<?php if ( $power_equipment_leads_phone ) : ?>
+					<a href="tel:<?php echo esc_attr( power_equipment_leads_phone_href( $power_equipment_leads_phone ) ); ?>" class="phone-link">
+						<?php power_equipment_leads_icon( 'phone', 'icon--sm' ); ?>
+						<?php echo esc_html( $power_equipment_leads_phone ); ?>
+					</a>
+				<?php endif; ?>
+				<a href="<?php echo esc_url( power_equipment_leads_get_theme_setting( 'cta_link' ) ); ?>" class="btn btn-industrial"><?php echo esc_html( power_equipment_leads_get_theme_setting( 'cta_text' ) ); ?></a>
+			</div>
+
+			<button class="menu-toggle" id="menuToggle" aria-label="<?php esc_attr_e( 'Open menu', 'power-equipment-leads' ); ?>" aria-expanded="false">
+				<span></span><span></span><span></span>
+			</button>
+		</div>
+
+		<div class="mobile-nav" id="mobileNav" hidden>
+			<?php power_equipment_leads_primary_nav(); ?>
+			<a href="<?php echo esc_url( power_equipment_leads_get_theme_setting( 'cta_link' ) ); ?>" class="btn btn-industrial btn-block"><?php echo esc_html( power_equipment_leads_get_theme_setting( 'cta_text' ) ); ?></a>
+		</div>
+	</header><!-- #siteHeader -->

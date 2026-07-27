@@ -1,0 +1,498 @@
+/**
+ * Site-wide design system: tokens, reset, buttons, brand, header, footer.
+ *
+ * Loaded after style.css so it takes precedence over the _s starter
+ * theme's default component styles.
+ */
+
+/* ---------- Tokens (industrial dark palette) ---------- */
+:root {
+	--radius: 0.25rem;
+
+	--background: oklch(0.16 0.008 240);
+	--foreground: oklch(0.96 0.005 60);
+	--card: oklch(0.2 0.01 240);
+	--card-foreground: oklch(0.96 0.005 60);
+	--popover: oklch(0.2 0.01 240);
+	--popover-foreground: oklch(0.96 0.005 60);
+
+	--primary: oklch(0.72 0.19 45); /* orange */
+	--primary-foreground: oklch(0.12 0.01 240);
+	--ember: oklch(0.62 0.22 35); /* deeper ember */
+
+	--secondary: oklch(0.24 0.01 240);
+	--secondary-foreground: oklch(0.96 0.005 60);
+	--muted: oklch(0.24 0.01 240);
+	--muted-foreground: oklch(0.68 0.01 60);
+	--accent: oklch(0.72 0.19 45);
+	--accent-foreground: oklch(0.12 0.01 240);
+	--destructive: oklch(0.62 0.22 27);
+	--destructive-foreground: oklch(0.98 0 0);
+	--border: oklch(0.28 0.01 240);
+	--input: oklch(0.24 0.01 240);
+	--ring: oklch(0.72 0.19 45);
+
+	--steel: oklch(0.2 0.01 240);
+	--steel-light: oklch(0.28 0.012 240);
+
+	--font-display: "Oswald", Impact, sans-serif;
+	--font-sans: "Barlow Condensed", "Barlow", system-ui, sans-serif;
+	--font-body: "Barlow", system-ui, sans-serif;
+
+	/* Back-compat aliases: earlier section CSS in this theme was authored
+	   against these shorter/--color-* names. Keep everything pointed at
+	   the canonical tokens above so there's a single source of truth. */
+	--bg: var(--background);
+	--bg-2: var(--card);
+	--fg: var(--foreground);
+	--primary-2: var(--ember);
+	--steel-2: var(--steel-light);
+
+	--color-bg: var(--background);
+	--color-bg-2: var(--card);
+	--color-steel: var(--steel);
+	--color-steel-2: var(--steel-light);
+	--color-foreground: var(--foreground);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-border: var(--border);
+	--color-primary: var(--primary);
+	--color-ember: var(--ember);
+}
+
+/* ---------- Layout ---------- */
+.container {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 1.5rem;
+}
+
+/* ---------- Shared visual utilities ---------- */
+.clip-diagonal-b {
+	clip-path: polygon(0 0, 100% 0, 100% calc(100% - 60px), 0 100%);
+}
+.clip-diagonal-t {
+	clip-path: polygon(0 60px, 100% 0, 100% 100%, 0 100%);
+}
+.clip-diagonal-both {
+	clip-path: polygon(0 60px, 100% 0, 100% calc(100% - 60px), 0 100%);
+}
+.text-stroke {
+	-webkit-text-stroke: 2px var(--color-primary);
+	color: transparent;
+}
+.bg-grid {
+	background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+		linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+	background-size: 40px 40px;
+}
+.bg-diamond {
+	background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 2px, transparent 2px 12px),
+		repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 0 2px, transparent 2px 12px);
+}
+@keyframes ticker {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-50%);
+	}
+}
+.animate-ticker {
+	animation: ticker 40s linear infinite;
+}
+.icon {
+	width: 1.1em;
+	height: 1.1em;
+	flex-shrink: 0;
+}
+.icon--sm {
+	width: 18px;
+	height: 18px;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+html {
+	scroll-behavior: smooth;
+}
+body {
+	background: var(--bg);
+	color: var(--fg);
+	font-family: var(--font-body);
+	-webkit-font-smoothing: antialiased;
+	line-height: 1.5;
+}
+h1,
+h2,
+h3,
+h4 {
+	font-family: var(--font-display);
+	text-transform: uppercase;
+	letter-spacing: 0.01em;
+	font-weight: 700;
+	line-height: 1.05;
+}
+.site a {
+	color: inherit;
+	text-decoration: none;
+}
+.site img {
+	max-width: 100%;
+	display: block;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.85rem 1.4rem;
+	font-family: var(--font-sans);
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	font-size: 0.875rem;
+	border: 2px solid transparent;
+	border-radius: 2px;
+	cursor: pointer;
+	transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease;
+}
+.btn-industrial,
+.btn--industrial {
+	background: var(--primary);
+	color: var(--primary-foreground);
+	border: none;
+	border-bottom: 4px solid var(--ember);
+	border-radius: 0;
+	transition: transform 0.15s ease, background-color 0.15s ease;
+}
+.btn-industrial:hover,
+.btn--industrial:hover {
+	background: oklch(0.78 0.19 50);
+	transform: translateY(-2px);
+}
+.btn-industrial:active,
+.btn--industrial:active {
+	transform: translateY(0);
+}
+.btn-block {
+	width: 100%;
+}
+.btn--steel {
+	background: transparent;
+	color: var(--color-foreground);
+	border: 2px solid var(--color-foreground);
+	border-radius: 0;
+	opacity: 0.9;
+}
+.btn--steel:hover {
+	background: var(--color-foreground);
+	color: var(--color-bg);
+	opacity: 1;
+}
+.btn--lg {
+	padding: 1.1rem 2rem;
+	font-size: 0.95rem;
+	letter-spacing: 0.2em;
+}
+
+/* ---------- Brand ---------- */
+.brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.75rem;
+}
+.brand-mark {
+	width: 38px;
+	height: 38px;
+	display: grid;
+	place-items: center;
+	flex-shrink: 0;
+	background: var(--primary);
+	color: var(--primary-foreground);
+	font-family: var(--font-display);
+	font-weight: 700;
+}
+.brand-mark svg {
+	width: 20px;
+	height: 20px;
+}
+.brand-mark img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+.brand-text {
+	display: flex;
+	flex-direction: column;
+	line-height: 1;
+}
+.brand-name {
+	font-family: var(--font-display);
+	font-size: 1.25rem;
+	letter-spacing: 0.04em;
+}
+.brand-sub {
+	font-family: var(--font-sans);
+	font-size: 0.7rem;
+	color: var(--muted);
+	text-transform: uppercase;
+	letter-spacing: 0.18em;
+	margin-top: 3px;
+}
+.custom-logo-link img {
+	max-height: 42px;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	background: rgba(11, 13, 16, 0.85);
+	backdrop-filter: blur(12px);
+	border-bottom: 1px solid var(--border);
+}
+.site-header.scrolled {
+	background: rgba(11, 13, 16, 0.96);
+}
+.header-inner {
+	max-width: 1280px;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1.5rem;
+	padding: 0.9rem 1.5rem;
+}
+.primary-nav {
+	display: flex;
+	gap: 1.75rem;
+}
+.primary-nav a {
+	font-family: var(--font-sans);
+	text-transform: uppercase;
+	font-weight: 600;
+	font-size: 0.9rem;
+	letter-spacing: 0.12em;
+	color: var(--fg);
+	position: relative;
+	padding: 0.25rem 0;
+}
+.primary-nav a::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -4px;
+	height: 2px;
+	width: 0;
+	background: var(--primary);
+	transition: width 0.2s ease;
+}
+.primary-nav a:hover {
+	color: var(--primary);
+}
+.primary-nav a:hover::after {
+	width: 100%;
+}
+
+.header-cta {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+.phone-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-family: var(--font-sans);
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	color: var(--fg);
+}
+.phone-link:hover {
+	color: var(--primary);
+}
+
+/* Mobile toggle */
+.site-header .menu-toggle {
+	display: none;
+	background: transparent;
+	border: 1px solid var(--border);
+	width: 44px;
+	height: 44px;
+	border-radius: 2px;
+	cursor: pointer;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 5px;
+}
+.site-header .menu-toggle span {
+	width: 22px;
+	height: 2px;
+	background: var(--fg);
+	transition: 0.2s;
+}
+.site-header .menu-toggle[aria-expanded="true"] span:nth-child(1) {
+	transform: translateY(7px) rotate(45deg);
+}
+.site-header .menu-toggle[aria-expanded="true"] span:nth-child(2) {
+	opacity: 0;
+}
+.site-header .menu-toggle[aria-expanded="true"] span:nth-child(3) {
+	transform: translateY(-7px) rotate(-45deg);
+}
+
+.mobile-nav {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	padding: 1.25rem 1.5rem 2rem;
+	border-top: 1px solid var(--border);
+	background: var(--bg-2);
+}
+/* The [hidden] attribute alone isn't enough to win against the class
+   selector above at equal specificity — this makes sure toggling the
+   `hidden` attribute in JS actually hides the panel. */
+.mobile-nav[hidden] {
+	display: none;
+}
+.mobile-nav a {
+	font-family: var(--font-sans);
+	text-transform: uppercase;
+	font-weight: 600;
+	letter-spacing: 0.12em;
+	font-size: 1rem;
+}
+
+@media (max-width: 960px) {
+	.primary-nav,
+	.header-cta {
+		display: none;
+	}
+	.site-header .menu-toggle {
+		display: inline-flex;
+	}
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+	background: var(--bg-2);
+	border-top: 3px solid var(--primary);
+	color: var(--fg);
+	margin-top: 4rem;
+	background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0 2px, transparent 2px 12px),
+		repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.02) 0 2px, transparent 2px 12px);
+}
+.footer-grid {
+	max-width: 1280px;
+	margin: 0 auto;
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr;
+	gap: 2.5rem;
+	padding: 4rem 1.5rem 2.5rem;
+}
+.footer-col.brand-col .brand-name {
+	font-size: 1.4rem;
+}
+.footer-tag {
+	color: var(--muted);
+	margin-top: 1rem;
+	max-width: 320px;
+}
+.footer-col h4 {
+	font-size: 0.95rem;
+	letter-spacing: 0.18em;
+	color: var(--primary);
+	margin-bottom: 1.1rem;
+	padding-bottom: 0.6rem;
+	border-bottom: 1px solid var(--border);
+}
+.footer-col ul {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+}
+.footer-col a {
+	color: var(--fg);
+	font-family: var(--font-sans);
+	letter-spacing: 0.04em;
+}
+.footer-col a:hover {
+	color: var(--primary);
+}
+.footer-col address {
+	font-style: normal;
+	color: var(--fg);
+	line-height: 1.7;
+}
+.footer-col .hours {
+	color: var(--muted);
+	margin-top: 0.75rem;
+	font-family: var(--font-sans);
+	letter-spacing: 0.06em;
+}
+
+.footer-bar {
+	max-width: 1280px;
+	margin: 0 auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1.25rem 1.5rem;
+	border-top: 1px solid var(--border);
+	color: var(--muted);
+	font-family: var(--font-sans);
+	font-size: 0.85rem;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+.footer-links {
+	display: flex;
+	gap: 1.5rem;
+}
+.footer-links a:hover {
+	color: var(--primary);
+}
+
+@media (max-width: 800px) {
+	.footer-grid {
+		grid-template-columns: 1fr 1fr;
+		gap: 2rem;
+	}
+	.footer-bar {
+		flex-direction: column;
+		gap: 0.75rem;
+		text-align: center;
+	}
+}
+@media (max-width: 480px) {
+	.footer-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ---------- Scroll-reveal utility (any block may use it) ---------- */
+.reveal {
+	opacity: 0;
+}
+.reveal.in-view {
+	animation: reveal-up 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+@keyframes reveal-up {
+	from {
+		opacity: 0;
+		transform: translateY(40px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
