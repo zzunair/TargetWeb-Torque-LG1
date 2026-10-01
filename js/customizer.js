@@ -20,23 +20,43 @@
 		} );
 	} );
 
-	// Header text color.
-	wp.customize( 'header_textcolor', function( value ) {
-		value.bind( function( to ) {
-			if ( 'blank' === to ) {
-				$( '.site-title, .site-description' ).css( {
-					clip: 'rect(1px, 1px, 1px, 1px)',
-					position: 'absolute',
-				} );
-			} else {
-				$( '.site-title, .site-description' ).css( {
-					clip: 'auto',
-					position: 'relative',
-				} );
-				$( '.site-title a, .site-description' ).css( {
-					color: to,
-				} );
-			}
+	// Brand colours. Each picker writes straight to the design token it owns,
+	// so every rule built on that token updates without a preview reload.
+
+	// Kept in sync with power_equipment_leads_contrast_ink() in inc/colors.php.
+	const contrastInk = ( hex ) => {
+		const channels = String( hex ).replace( '#', '' ).match( /^(\w\w)(\w\w)(\w\w)$/ );
+
+		if ( ! channels ) {
+			return '#0b0d10';
+		}
+
+		const luminance = [ 0.2126, 0.7152, 0.0722 ].reduce( ( total, weight, index ) => {
+			const channel = parseInt( channels[ index + 1 ], 16 ) / 255;
+			const linear = channel <= 0.04045 ? channel / 12.92 : Math.pow( ( channel + 0.055 ) / 1.055, 2.4 );
+
+			return total + ( weight * linear );
+		}, 0 );
+
+		return luminance > 0.179 ? '#0b0d10' : '#ffffff';
+	};
+
+	const brandColors = {
+		pel_color_primary: { property: '--primary', inkProperty: '--primary-foreground' },
+		pel_color_secondary: { property: '--ember' },
+	};
+
+	Object.keys( brandColors ).forEach( ( setting ) => {
+		const token = brandColors[ setting ];
+
+		wp.customize( setting, ( value ) => {
+			value.bind( ( to ) => {
+				document.documentElement.style.setProperty( token.property, to );
+
+				if ( token.inkProperty ) {
+					document.documentElement.style.setProperty( token.inkProperty, contrastInk( to ) );
+				}
+			} );
 		} );
 	} );
 }( jQuery ) );

@@ -16,21 +16,27 @@
 	--popover: oklch(0.2 0.01 240);
 	--popover-foreground: oklch(0.96 0.005 60);
 
+	/* The two brand colours. Both are overridden from
+	   Appearance > Customize > Colors, so nothing else in this theme should
+	   restate their literal values — derive from them instead. */
 	--primary: oklch(0.72 0.19 45); /* orange */
 	--primary-foreground: oklch(0.12 0.01 240);
 	--ember: oklch(0.62 0.22 35); /* deeper ember */
+
+	--primary-hover: color-mix(in oklab, var(--primary) 85%, #fff);
+	--primary-soft: color-mix(in oklab, var(--primary) 12%, transparent);
 
 	--secondary: oklch(0.24 0.01 240);
 	--secondary-foreground: oklch(0.96 0.005 60);
 	--muted: oklch(0.24 0.01 240);
 	--muted-foreground: oklch(0.68 0.01 60);
-	--accent: oklch(0.72 0.19 45);
-	--accent-foreground: oklch(0.12 0.01 240);
+	--accent: var(--primary);
+	--accent-foreground: var(--primary-foreground);
 	--destructive: oklch(0.62 0.22 27);
 	--destructive-foreground: oklch(0.98 0 0);
 	--border: oklch(0.28 0.01 240);
 	--input: oklch(0.24 0.01 240);
-	--ring: oklch(0.72 0.19 45);
+	--ring: var(--primary);
 
 	--steel: oklch(0.2 0.01 240);
 	--steel-light: oklch(0.28 0.012 240);
@@ -172,7 +178,7 @@ h4 {
 }
 .btn-industrial:hover,
 .btn--industrial:hover {
-	background: oklch(0.78 0.19 50);
+	background: var(--primary-hover);
 	transform: translateY(-2px);
 }
 .btn-industrial:active,

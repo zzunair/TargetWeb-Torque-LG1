@@ -58,7 +58,6 @@ function power_equipment_leads_lead_columns( $columns ) {
 		'title'           => esc_html__( 'Name', 'power-equipment-leads' ),
 		'lead_email'      => esc_html__( 'Email', 'power-equipment-leads' ),
 		'lead_phone'      => esc_html__( 'Phone', 'power-equipment-leads' ),
-		'lead_equipment'  => esc_html__( 'Equipment Interest', 'power-equipment-leads' ),
 		'lead_source'     => esc_html__( 'Source Page', 'power-equipment-leads' ),
 		'date'            => $columns['date'],
 	);
@@ -80,9 +79,6 @@ function power_equipment_leads_lead_column_content( $column, $post_id ) {
 			break;
 		case 'lead_phone':
 			echo esc_html( get_post_meta( $post_id, 'phone', true ) );
-			break;
-		case 'lead_equipment':
-			echo esc_html( get_post_meta( $post_id, 'equipment_interest', true ) );
 			break;
 		case 'lead_source':
 			$source_url = get_post_meta( $post_id, 'source_url', true );
@@ -115,7 +111,11 @@ add_action( 'add_meta_boxes', 'power_equipment_leads_lead_meta_box' );
  * @param WP_Post $post Current post.
  */
 function power_equipment_leads_render_lead_meta_box( $post ) {
+	// ZIP and Equipment Interest are no longer collected; they stay listed so
+	// leads captured before the form change still show them.
 	$fields = array(
+		'first_name'         => esc_html__( 'First Name', 'power-equipment-leads' ),
+		'last_name'          => esc_html__( 'Last Name', 'power-equipment-leads' ),
 		'email'              => esc_html__( 'Email', 'power-equipment-leads' ),
 		'phone'              => esc_html__( 'Phone', 'power-equipment-leads' ),
 		'zip'                => esc_html__( 'ZIP Code', 'power-equipment-leads' ),
@@ -170,16 +170,16 @@ function power_equipment_leads_handle_lead_submission() {
 		wp_send_json_success( array( 'message' => power_equipment_leads_get_setting( 'success_message' ) ) );
 	}
 
-	$name               = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
-	$email              = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
-	$phone              = isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '';
-	$zip                = isset( $_POST['zip'] ) ? sanitize_text_field( wp_unslash( $_POST['zip'] ) ) : '';
-	$equipment_interest = isset( $_POST['equipment_interest'] ) ? sanitize_text_field( wp_unslash( $_POST['equipment_interest'] ) ) : '';
-	$message            = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
-	$form_id            = isset( $_POST['form_id'] ) ? sanitize_text_field( wp_unslash( $_POST['form_id'] ) ) : 'lead-form';
-	$source             = isset( $_POST['source_url'] ) ? sanitize_url( wp_unslash( $_POST['source_url'] ) ) : '';
+	$first_name = isset( $_POST['first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['first_name'] ) ) : '';
+	$last_name  = isset( $_POST['last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['last_name'] ) ) : '';
+	$email      = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+	$phone      = isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '';
+	$message    = isset( $_POST['message'] ) ? sanitize_textarea_field( wp_unslash( $_POST['message'] ) ) : '';
+	$form_id    = isset( $_POST['form_id'] ) ? sanitize_text_field( wp_unslash( $_POST['form_id'] ) ) : 'lead-form';
+	$source     = isset( $_POST['source_url'] ) ? sanitize_url( wp_unslash( $_POST['source_url'] ) ) : '';
+	$name       = trim( $first_name . ' ' . $last_name );
 
-	if ( '' === $name || ! is_email( $email ) ) {
+	if ( '' === $first_name || ! is_email( $email ) ) {
 		wp_send_json_error(
 			array( 'message' => esc_html__( 'Please enter your name and a valid email address.', 'power-equipment-leads' ) ),
 			400
@@ -198,15 +198,15 @@ function power_equipment_leads_handle_lead_submission() {
 		wp_send_json_error( array( 'message' => esc_html__( 'Something went wrong. Please try again.', 'power-equipment-leads' ) ), 500 );
 	}
 
+	update_post_meta( $post_id, 'first_name', $first_name );
+	update_post_meta( $post_id, 'last_name', $last_name );
 	update_post_meta( $post_id, 'email', $email );
 	update_post_meta( $post_id, 'phone', $phone );
-	update_post_meta( $post_id, 'zip', $zip );
-	update_post_meta( $post_id, 'equipment_interest', $equipment_interest );
 	update_post_meta( $post_id, 'message', $message );
 	update_post_meta( $post_id, 'form_id', $form_id );
 	update_post_meta( $post_id, 'source_url', $source );
 
-	power_equipment_leads_send_lead_notification( $post_id, $name, $email, $phone, $message, $zip, $equipment_interest );
+	power_equipment_leads_send_lead_notification( $post_id, $name, $email, $phone, $message );
 
 	wp_send_json_success(
 		array(

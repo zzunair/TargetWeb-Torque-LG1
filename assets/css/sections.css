@@ -382,7 +382,7 @@
 	height: 56px;
 	display: grid;
 	place-items: center;
-	background: oklch(0.72 0.19 45 / 0.1);
+	background: var(--primary-soft);
 	border: 2px solid var(--color-primary);
 	color: var(--color-primary);
 	transition: background-color 0.25s ease, color 0.25s ease;
@@ -860,6 +860,89 @@
 .lead-form-card__badge .icon {
 	width: 26px;
 	height: 26px;
+}
+
+/* TargetWeb CRM simple (non-modal) form, hosted in the card. */
+.lead-form-card #tw-crm-popup[data-tw-crm-inline] {
+	display: block;
+	position: static;
+	padding: 0;
+}
+.lead-form-card .tw-crm-popup__close,
+.lead-form-card .tw-crm-form__title {
+	display: none;
+}
+.lead-form-card .tw-crm-form__row {
+	gap: 0 1.25rem;
+}
+.lead-form-card .tw-crm-form__field {
+	margin-bottom: 1.25rem;
+}
+.lead-form-card .tw-crm-form__field label {
+	font-family: var(--font-sans);
+	font-size: 0.75rem;
+	font-weight: 400;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--color-muted-foreground);
+}
+.lead-form-card .tw-crm-form__req {
+	color: var(--color-primary);
+}
+.lead-form-card .tw-crm-form__field input,
+.lead-form-card .tw-crm-form__field select {
+	height: 3rem;
+}
+.lead-form-card .tw-crm-form__field input,
+.lead-form-card .tw-crm-form__field textarea,
+.lead-form-card .tw-crm-form__field select {
+	padding: 0 0.9rem;
+	border: 1px solid var(--color-border);
+	border-radius: 0;
+	background: var(--color-bg);
+	color: var(--color-foreground);
+	font-size: 1rem;
+}
+.lead-form-card .tw-crm-form__field textarea {
+	padding: 0.75rem 0.9rem;
+}
+.lead-form-card .tw-crm-form__field input:focus,
+.lead-form-card .tw-crm-form__field textarea:focus,
+.lead-form-card .tw-crm-form__field select:focus {
+	border-color: var(--color-primary);
+	box-shadow: none;
+}
+.lead-form-card .tw-crm-form__feedback {
+	border-radius: 0;
+	background: transparent;
+}
+.lead-form-card .tw-crm-form__feedback.is-error {
+	background: transparent;
+	color: #e57373;
+	border: 1px solid #e57373;
+}
+.lead-form-card .tw-crm-form__feedback.is-success {
+	background: transparent;
+	color: #81c784;
+	border: 1px solid #81c784;
+}
+.lead-form-card .tw-crm-form__submit {
+	margin-top: 0.75rem;
+	padding: 1.1rem 2rem;
+	background: var(--primary);
+	color: var(--primary-foreground);
+	border: 0;
+	border-bottom: 4px solid var(--ember);
+	border-radius: 0;
+	font-family: var(--font-sans);
+	letter-spacing: 0.2em;
+}
+.lead-form-card .tw-crm-form__submit:hover:not(:disabled) {
+	background: var(--primary-hover);
+}
+.lead-form-card > .pel-lead-form__disclaimer {
+	max-width: none;
+	margin-top: 1rem;
 }
 
 .pel-lead-form__grid {

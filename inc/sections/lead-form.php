@@ -91,18 +91,6 @@ function power_equipment_leads_lead_form_field_defs() {
 			'label'   => esc_html__( 'Disclaimer Text', 'power-equipment-leads' ),
 			'default' => 'We call back within 2 business hours. No spam, ever.',
 		),
-		'show_zip_field'      => array(
-			'label'    => esc_html__( 'Show ZIP Code Field', 'power-equipment-leads' ),
-			'type'     => 'checkbox',
-			'default'  => true,
-			'sanitize' => 'power_equipment_leads_sanitize_checkbox',
-		),
-		'show_equipment_field' => array(
-			'label'    => esc_html__( 'Show Equipment Interest Field', 'power-equipment-leads' ),
-			'type'     => 'checkbox',
-			'default'  => true,
-			'sanitize' => 'power_equipment_leads_sanitize_checkbox',
-		),
 		'show_message_field' => array(
 			'label'    => esc_html__( 'Show Message Field', 'power-equipment-leads' ),
 			'type'     => 'checkbox',
@@ -129,21 +117,4 @@ function power_equipment_leads_lead_form_field_defs() {
  */
 function power_equipment_leads_get_lead_form_setting( $key ) {
 	return power_equipment_leads_get_section_setting( power_equipment_leads_lead_form_field_defs(), 'pel_lead_form_', $key );
-}
-
-/**
- * Equipment Interest dropdown options, sourced from the Categories section
- * so the two stay in sync without duplicate data entry.
- *
- * @return string[]
- */
-function power_equipment_leads_get_lead_form_equipment_choices() {
-	$choices = array();
-	for ( $i = 1; $i <= 6; $i++ ) {
-		$name = power_equipment_leads_get_categories_setting( "cat{$i}_name" );
-		if ( $name ) {
-			$choices[] = $name;
-		}
-	}
-	return $choices;
 }

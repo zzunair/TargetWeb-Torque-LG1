@@ -73,18 +73,6 @@ function power_equipment_leads_setup() {
 		)
 	);
 
-	// Set up the WordPress core custom background feature.
-	add_theme_support(
-		'custom-background',
-		apply_filters(
-			'power_equipment_leads_custom_background_args',
-			array(
-				'default-color' => 'ffffff',
-				'default-image' => '',
-			)
-		)
-	);
-
 	// Add theme support for selective refresh for widgets.
 	add_theme_support( 'customize-selective-refresh-widgets' );
 
@@ -209,11 +197,6 @@ function power_equipment_leads_resource_hints( $urls, $relation_type ) {
 add_filter( 'wp_resource_hints', 'power_equipment_leads_resource_hints', 10, 2 );
 
 /**
- * Implement the Custom Header feature.
- */
-require get_template_directory() . '/inc/custom-header.php';
-
-/**
  * Custom template tags for this theme.
  */
 require get_template_directory() . '/inc/template-tags.php';
@@ -227,6 +210,11 @@ require get_template_directory() . '/inc/template-functions.php';
  * Customizer additions.
  */
 require get_template_directory() . '/inc/customizer.php';
+
+/**
+ * Brand colour settings and the inline CSS that applies them.
+ */
+require get_template_directory() . '/inc/colors.php';
 
 /**
  * Custom nav menu walker used by the header/footer nav locations.

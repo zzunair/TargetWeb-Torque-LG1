@@ -2,7 +2,7 @@
  * Handles AJAX submission for every ".pel-lead-form" on the page.
  *
  * Any lead-form block just needs to render a <form class="pel-lead-form">
- * with a data-form-id attribute and normal name/email/phone/message inputs;
+ * with a data-form-id attribute and first_name/last_name/email/phone/message inputs;
  * this script takes care of the rest (submit, disable button, show
  * success/error, optional redirect).
  */

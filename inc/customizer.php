@@ -11,9 +11,8 @@
  * @param WP_Customize_Manager $wp_customize Theme Customizer object.
  */
 function power_equipment_leads_customize_register( $wp_customize ) {
-	$wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
-	$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
-	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
+	$wp_customize->get_setting( 'blogname' )->transport        = 'postMessage';
+	$wp_customize->get_setting( 'blogdescription' )->transport = 'postMessage';
 
 	if ( isset( $wp_customize->selective_refresh ) ) {
 		$wp_customize->selective_refresh->add_partial(
@@ -33,6 +32,33 @@ function power_equipment_leads_customize_register( $wp_customize ) {
 	}
 }
 add_action( 'customize_register', 'power_equipment_leads_customize_register' );
+
+/**
+ * Strips the Customizer back to what this theme actually uses, leaving
+ * Site Identity, the theme's own panels, Menus and Additional CSS.
+ *
+ * Header Image, Background Image and the core Colors section are already
+ * gone because the theme no longer declares custom-header/custom-background
+ * support — they're listed here too so re-adding either support elsewhere
+ * can't quietly bring the panels back. Nothing is lost for the other three:
+ * widgets stay editable at Appearance > Widgets, the front page at
+ * Settings > Reading, and the shop at WooCommerce > Settings.
+ *
+ * Hooked late so WooCommerce (which registers its panel at priority 10) has
+ * run by the time this fires.
+ *
+ * @param WP_Customize_Manager $wp_customize Customizer manager.
+ */
+function power_equipment_leads_remove_unused_customizer_sections( $wp_customize ) {
+	foreach ( array( 'widgets', 'woocommerce' ) as $panel ) {
+		$wp_customize->remove_panel( $panel );
+	}
+
+	foreach ( array( 'colors', 'header_image', 'background_image', 'static_front_page' ) as $section ) {
+		$wp_customize->remove_section( $section );
+	}
+}
+add_action( 'customize_register', 'power_equipment_leads_remove_unused_customizer_sections', 20 );
 
 /**
  * Render the site title for the selective refresh partial.

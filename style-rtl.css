@@ -1,16 +1,15 @@
 /*!
 Theme Name: Power Equipment Leads
-Theme URI: https://underscores.me/
-Author: Automattic
-Author URI: https://automattic.com/
-Description: Hi. I'm a starter theme called <code>Power Equipment Leads</code>, or <em>underscores</em>, if you like. I'm a theme meant for hacking so don't use me as a <em>Parent Theme</em>. Instead try turning me into the next, most awesome, WordPress theme out there. That's what I'm here for.
+Author: TargetWeb
+Description: A lead-generation theme for power equipment and outdoor machinery dealers, with Customizer-driven homepage sections, built-in lead capture, and an industrial dark design.
 Version: 1.0.0
-Tested up to: 5.4
-Requires PHP: 5.6
+Requires at least: 5.0
+Tested up to: 7.1
+Requires PHP: 7.4
 License: GNU General Public License v2 or later
 License URI: LICENSE
-Text Domain: Power Equipment Leads
-Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
+Text Domain: power-equipment-leads
+Tags: custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
 
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned.
