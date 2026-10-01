@@ -1,6 +1,6 @@
 <?php
 /**
- * Power Equipment Leads functions and definitions
+ * Torque - LG1 functions and definitions
  *
  * @link https://developer.wordpress.org/themes/basics/theme-functions/
  *
@@ -23,7 +23,7 @@ function power_equipment_leads_setup() {
 	/*
 		* Make theme available for translation.
 		* Translations can be filed in the /languages/ directory.
-		* If you're building a theme based on Power Equipment Leads, use a find and replace
+		* If you're building a theme based on Torque - LG1, use a find and replace
 		* to change 'power-equipment-leads' to the name of your theme in all the template files.
 		*/
 	load_theme_textdomain( 'power-equipment-leads', get_template_directory() . '/languages' );

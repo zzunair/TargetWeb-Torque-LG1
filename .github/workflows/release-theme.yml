@@ -46,6 +46,6 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "Power Equipment Leads ${{ steps.theme.outputs.version }}"
+          name: "Torque - LG1 ${{ steps.theme.outputs.version }}"
           generate_release_notes: true
           files: ${{ env.ZIP_PATH }}

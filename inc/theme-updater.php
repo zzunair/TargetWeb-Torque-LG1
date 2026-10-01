@@ -66,6 +66,68 @@ if ( ! function_exists( 'targetweb_update_token_notice' ) ) {
 	}
 }
 
+/**
+ * Make an uploaded copy of this theme replace the installed one.
+ *
+ * WordPress shows "Replace installed with uploaded" only when the folder
+ * inside the zip matches the theme directory already on disk (Lead-Gen-1).
+ * A GitHub source download is named Lead-Gen-1-main, so it would install a
+ * second theme. While this theme is active, point that upload at the
+ * installed folder so the replace prompt appears.
+ *
+ * @param string|WP_Error $source        Package source path.
+ * @param string          $remote_source Original remote source path.
+ * @param WP_Upgrader     $upgrader      Upgrader instance.
+ * @param array           $hook_extra    Extra arguments from the upgrader.
+ * @return string|WP_Error
+ */
+function power_equipment_leads_match_upload_folder( $source, $remote_source, $upgrader, $hook_extra ) {
+	if ( is_wp_error( $source ) || empty( $hook_extra['type'] ) || 'theme' !== $hook_extra['type'] ) {
+		return $source;
+	}
+	if ( empty( $hook_extra['action'] ) || 'install' !== $hook_extra['action'] ) {
+		return $source;
+	}
+
+	global $wp_filesystem;
+	if ( empty( $wp_filesystem ) ) {
+		return $source;
+	}
+
+	$style = trailingslashit( $source ) . 'style.css';
+	if ( ! is_readable( $style ) ) {
+		return $source;
+	}
+
+	$headers = get_file_data(
+		$style,
+		array(
+			'Name' => 'Theme Name',
+		)
+	);
+	if ( 'Torque - LG1' !== $headers['Name'] ) {
+		return $source;
+	}
+
+	$target_slug  = get_template();
+	$current_slug = basename( untrailingslashit( $source ) );
+	if ( ! $target_slug || $current_slug === $target_slug ) {
+		return $source;
+	}
+
+	$corrected = trailingslashit( dirname( untrailingslashit( $source ) ) ) . $target_slug;
+	if ( $wp_filesystem->exists( $corrected ) ) {
+		return $source;
+	}
+
+	if ( ! $wp_filesystem->move( untrailingslashit( $source ), $corrected ) ) {
+		return $source;
+	}
+
+	return trailingslashit( $corrected );
+}
+add_filter( 'upgrader_source_selection', 'power_equipment_leads_match_upload_folder', 1, 4 );
+
 $puc_loader = get_stylesheet_directory() . '/inc/lib/plugin-update-checker/plugin-update-checker.php';
 if ( ! is_readable( $puc_loader ) ) {
 	return;
