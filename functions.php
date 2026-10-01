@@ -238,6 +238,13 @@ require get_template_directory() . '/inc/homepage-sections.php';
 require get_template_directory() . '/inc/leads.php';
 
 /**
+ * GitHub theme updates (Appearance → Themes).
+ */
+if ( file_exists( get_template_directory() . '/inc/theme-updater.php' ) ) {
+	require_once get_template_directory() . '/inc/theme-updater.php';
+}
+
+/**
  * Load Jetpack compatibility file.
  */
 if ( defined( 'JETPACK__VERSION' ) ) {
