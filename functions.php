@@ -236,6 +236,7 @@ require get_template_directory() . '/inc/homepage-sections.php';
  * Lead capture: storage, AJAX handler, and admin settings.
  */
 require get_template_directory() . '/inc/leads.php';
+require get_template_directory() . '/inc/maintenance.php';
 
 /**
  * GitHub theme updates (Appearance → Themes).
