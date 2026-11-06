@@ -12,6 +12,20 @@ if ( ! defined( '_S_VERSION' ) ) {
 	define( '_S_VERSION', '1.0.0' );
 }
 
+if ( ! function_exists( 'tw_main_menu_args' ) ) {
+	function tw_main_menu_args( $args = array() ) {
+		$menu = wp_get_nav_menu_object( 'Main Menu' );
+		if ( ! $menu ) {
+			$menu = wp_get_nav_menu_object( 'main-menu' );
+		}
+		if ( $menu ) {
+			$args['menu'] = (int) $menu->term_id;
+		}
+		return $args;
+	}
+}
+}
+
 /**
  * Sets up theme defaults and registers support for various WordPress features.
  *
@@ -134,7 +148,7 @@ add_action( 'widgets_init', 'power_equipment_leads_widgets_init' );
  * Enqueue scripts and styles.
  */
 function power_equipment_leads_scripts() {
-	wp_enqueue_style( 'power-equipment-leads-style', get_stylesheet_uri(), array(), _S_VERSION );
+	wp_enqueue_style( 'power-equipment-leads-style', get_template_directory_uri() . '/style.css', array(), _S_VERSION );
 	wp_style_add_data( 'power-equipment-leads-style', 'rtl', 'replace' );
 
 	wp_enqueue_style(
@@ -170,6 +184,14 @@ function power_equipment_leads_scripts() {
 
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
+	}
+
+	if ( get_stylesheet() !== get_template() ) {
+		$child_deps = array( 'power-equipment-leads-site' );
+		if ( is_front_page() ) {
+			$child_deps[] = 'power-equipment-leads-sections';
+		}
+		wp_enqueue_style( 'power-equipment-leads-child', get_stylesheet_uri(), $child_deps, wp_get_theme()->get( 'Version' ) );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'power_equipment_leads_scripts' );
@@ -251,4 +273,16 @@ if ( file_exists( get_template_directory() . '/inc/theme-updater.php' ) ) {
 if ( defined( 'JETPACK__VERSION' ) ) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
+
+/**
+ * TargetCRM widget. Prints only when a client ID is saved.
+ */
+function power_equipment_leads_targetcrm_widget() {
+	$client_id = sanitize_text_field( (string) get_theme_mod( 'targetcrm_client_id', '' ) );
+	if ( '' === $client_id ) {
+		return;
+	}
+	echo '<script src="https://app.constellationdealer.com/widget.js" id="target-crm-widget" data-client-id="' . esc_attr( $client_id ) . '" defer></script>' . "\n";
+}
+add_action( 'wp_head', 'power_equipment_leads_targetcrm_widget', 20 );
 

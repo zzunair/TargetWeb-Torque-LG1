@@ -40,7 +40,8 @@
 						<?php endif; ?>
 					</span>
 					<span class="brand-text">
-						<span class="brand-name"><?php bloginfo( 'name' ); ?></span>
+						<?php $power_equipment_leads_logo_text = power_equipment_leads_get_theme_setting( 'logo_text' ); ?>
+						<span class="brand-name"><?php echo esc_html( $power_equipment_leads_logo_text ? $power_equipment_leads_logo_text : 'MowtivatedPwr' ); ?></span>
 						<?php $power_equipment_leads_tagline = get_bloginfo( 'description', 'display' ); ?>
 						<?php if ( $power_equipment_leads_tagline ) : ?>
 							<span class="brand-sub"><?php echo esc_html( $power_equipment_leads_tagline ); ?></span>

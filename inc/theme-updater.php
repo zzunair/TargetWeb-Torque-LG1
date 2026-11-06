@@ -128,7 +128,7 @@ function power_equipment_leads_match_upload_folder( $source, $remote_source, $up
 }
 add_filter( 'upgrader_source_selection', 'power_equipment_leads_match_upload_folder', 1, 4 );
 
-$puc_loader = get_stylesheet_directory() . '/inc/lib/plugin-update-checker/plugin-update-checker.php';
+$puc_loader = get_template_directory() . '/inc/lib/plugin-update-checker/plugin-update-checker.php';
 if ( ! is_readable( $puc_loader ) ) {
 	return;
 }
@@ -145,8 +145,8 @@ $targetweb_github_branch = ( defined( 'TARGETWEB_GITHUB_BRANCH' ) && TARGETWEB_G
 
 $targetweb_update_checker = \YahnisElsts\PluginUpdateChecker\v5\PucFactory::buildUpdateChecker(
 	'https://github.com/zzunair/Lead-Gen-1/',
-	get_stylesheet_directory() . '/style.css',
-	get_stylesheet()
+	get_template_directory() . '/style.css',
+	get_template()
 );
 
 $targetweb_update_checker->setBranch( $targetweb_github_branch );

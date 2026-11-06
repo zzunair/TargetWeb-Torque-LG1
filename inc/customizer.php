@@ -114,6 +114,10 @@ function power_equipment_leads_business_field_defs() {
 			'label'   => esc_html__( 'Header CTA Button Link', 'power-equipment-leads' ),
 			'default' => '#quote',
 		),
+		'logo_text'      => array(
+			'label'   => esc_html__( 'Logo text (used when no logo image)', 'power-equipment-leads' ),
+			'default' => 'MowtivatedPwr',
+		),
 		'brand_initials' => array(
 			'label'   => esc_html__( 'Brand Mark Text (leave blank for the flame icon)', 'power-equipment-leads' ),
 			'default' => '',
@@ -174,10 +178,40 @@ function power_equipment_leads_business_customize_register( $wp_customize ) {
 add_action( 'customize_register', 'power_equipment_leads_business_customize_register' );
 
 /**
+ * TargetCRM widget client ID. Empty leaves the script off.
+ */
+function power_equipment_leads_targetcrm_customize_register( $wp_customize ) {
+	$wp_customize->add_section(
+		'pel_targetcrm',
+		array(
+			'title'    => esc_html__( 'TargetCRM', 'power-equipment-leads' ),
+			'priority' => 160,
+		)
+	);
+	$wp_customize->add_setting(
+		'targetcrm_client_id',
+		array(
+			'default'           => '',
+			'sanitize_callback' => 'sanitize_text_field',
+		)
+	);
+	$wp_customize->add_control(
+		'targetcrm_client_id',
+		array(
+			'label'       => esc_html__( 'TargetCRM client ID', 'power-equipment-leads' ),
+			'description' => esc_html__( 'Loads the Constellation dealer widget. Leave empty to keep it off.', 'power-equipment-leads' ),
+			'section'     => 'pel_targetcrm',
+			'type'        => 'text',
+		)
+	);
+}
+add_action( 'customize_register', 'power_equipment_leads_targetcrm_customize_register' );
+
+/**
  * Reads a Business Info setting, falling back to its documented default
  * (the same default shown in the Customizer) if it has never been saved.
  *
- * @param string $key One of: phone, email, cta_text, cta_link, brand_initials,
+ * @param string $key One of: phone, email, cta_text, cta_link, logo_text, brand_initials,
  *                     footer_tagline, address_line1, address_line2, hours.
  * @return string
  */

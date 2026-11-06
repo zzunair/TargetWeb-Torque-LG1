@@ -67,13 +67,15 @@ class Power_Equipment_Leads_Flat_Nav_Walker extends Walker_Nav_Menu {
  */
 function power_equipment_leads_primary_nav() {
 	wp_nav_menu(
-		array(
-			'theme_location' => 'menu-1',
-			'container'      => false,
-			'items_wrap'     => '%3$s',
-			'walker'         => new Power_Equipment_Leads_Flat_Nav_Walker(),
-			'fallback_cb'    => 'power_equipment_leads_primary_nav_fallback',
-			'depth'          => 1,
+		tw_main_menu_args(
+			array(
+				'theme_location' => 'menu-1',
+				'container'      => false,
+				'items_wrap'     => '%3$s',
+				'walker'         => new Power_Equipment_Leads_Flat_Nav_Walker(),
+				'fallback_cb'    => false,
+				'depth'          => 1,
+			)
 		)
 	);
 }
